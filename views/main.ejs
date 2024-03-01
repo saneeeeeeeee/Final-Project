@@ -60,6 +60,27 @@
         .carousel-caption p {
             margin: 0; /* Remove margin for better spacing */
         }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        .role-delete-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: rgba(0,0,0,0.1);
+            color: rgb(0, 0, 0);
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -72,9 +93,8 @@
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <!-- HealthCare link -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/fitness">Fitness</a>
+                        <a class="nav-link" href="/covid">Covid-19</a>
                     </li>
                     <% if (user.role === 'admin') { %>
                         <li class="nav-item">
@@ -92,7 +112,13 @@
     <div class="container">
         <h1>Username: <%= user.username %></h1>
         <p>Role: <%= user.role %></p>
-        
+        <hr>
+        <div class="role-delete-container">
+            <form action="/delete-account" method="POST">
+                <button type="submit" class="btn btn-danger">Delete Account</button>
+            </form>
+        </div>
+        <hr>
         <!-- Carousel -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -138,6 +164,10 @@
         <div id="newsContainer" class="row"></div>
     </div>
 
+    <footer>
+        <p>Created by Toretay Abdymazhit, Group IT-2202</p>
+    </footer>
+
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -148,7 +178,7 @@
         // Function to fetch health news articles from News API
         function fetchHealthNews() {
             // Your News API key
-            const apiKey = 'apu_key';
+            const apiKey = 'api_key';
             // API endpoint for health news
             const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
             
