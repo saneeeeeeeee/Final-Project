@@ -8,6 +8,7 @@ const path = require('path');
 
 const app = express();
 
+// Update MongoDB connection to allow access from any IP address
 mongoose.connect('mongodb://localhost:27017/auth_demo', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const UserSchema = new mongoose.Schema({
@@ -29,15 +30,14 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
 app.use(express.static(path.join(__dirname, 'views')));
-app.use('/images',express.static('images'))
+app.use('/images', express.static('images'));
 
 // Nodemailer configuration
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'your_gmail', // Your Gmail email address
+        user: 'your_acc@gmail.com', // Your Gmail email address
         pass: 'your_pass' // Your Gmail password
     }
 });
@@ -70,7 +70,7 @@ app.post('/register', async (req, res) => {
 
         // Sending welcome message after registration
         const mailOptions = {
-            from: 'abdymazhittoretay@gmail.com', // Your Gmail email address
+            from: 'your_acc@gmail.com', // Your Gmail email address
             to: email, // User's email address
             subject: 'Welcome to our website!',
             text: `Dear ${firstName},\n\nWelcome to our website! We're glad to have you on board.\n\nBest regards,\nToretay`
@@ -109,8 +109,8 @@ app.get('/main', requireLogin, (req, res) => {
     res.render('main', { user: req.session.user });
 });
 
-app.get('/fitness', requireLogin, (req, res) => {
-    res.render('fitness', { user: req.session.user });
+app.get('/covid', requireLogin, (req, res) => {
+    res.render('covid', { user: req.session.user });
 });
 
 app.get('/logout', (req, res) => {
@@ -123,6 +123,37 @@ app.get('/admin', requireLogin, (req, res) => {
         res.render('admin', { user: req.session.user });
     } else {
         res.redirect('/login');
+    }
+});
+
+app.post('/delete-account', requireLogin, async (req, res) => {
+    try {
+        // Get the current user
+        const currentUser = req.session.user;
+        
+        // Delete the user from the database
+        await User.findByIdAndDelete(currentUser._id);
+
+        // Sending email to the user
+        const mailOptions = {
+            from: 'your_acc@gmail.com',
+            to: currentUser.email,
+            subject: 'Account Deletion Confirmation',
+            text: `Dear ${currentUser.firstName},\n\nYour account has been successfully deleted.\n\nBest regards,\nToretay`
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        // Destroy session and redirect to login page
+        req.session.destroy();
+        res.redirect('/login');
+    } catch (error) {
+        res.status(500).send('Error:' + error.message);
     }
 });
 
