@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-brand {
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+        }
+        .container {
+            max-width: 800px; /* Adjusted max-width for the carousel */
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: rgba(0,0,0,0.1);
+            color: rgb(0, 0, 0);
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+          <a class="navbar-brand" href="/main">Main Page</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                      <a class="nav-link" href="/covid">Covid-19</a>
+                  </li>
+                  <% if (user.role === 'admin') { %>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/admin">Admin Page</a>
+                      </li>
+                  <% } %>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/logout">Logout</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+
+  <div class="container">
+      <h1>Covid-19 Information (Kazakhstan):</h1>
+      <div id="covidData"></div>
+      <iframe src="https://covid-19.dataflowkit.com/assets/widget/c19-top-widget-light.html" width="750" height="540" frameborder="0"></iframe>
+  </div>
+  
+  <footer>
+    <p>Created by Toretay Abdymazhit, Group IT-2202</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- JavaScript to fetch and display COVID-19 data -->
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          fetch('https://covid-19.dataflowkit.com/v1/kazakhstan')
+              .then(response => response.json())
+              .then(data => {
+                  const covidDataElement = document.getElementById('covidData');
+                  covidDataElement.innerHTML = `
+                      <p>Total Cases: ${data['Total Cases_text']}</p>
+                      <p>Total Deaths: ${data['Total Deaths_text']}</p>
+                      <p>Total Recovered: ${data['Total Recovered_text']}</p>
+                      <p>Last Updated: ${data['Last Update']}</p>
+                  `;
+              })
+              .catch(error => console.error('Error fetching COVID-19 data:', error));
+      });
+  </script>
+</body>
+</html>
