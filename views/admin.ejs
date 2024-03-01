@@ -34,12 +34,18 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h1 {
+        h1, p {
             text-align: center;
             color: #333;
         }
-        p {
+        footer {
             text-align: center;
+            padding: 20px 0;
+            background-color: rgba(0,0,0,0.1);
+            color: rgb(0, 0, 0);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -53,9 +59,8 @@
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <!-- HealthCare link -->
                     <li class="nav-item">
-                        <a class="nav-link" href="/fitness">Fitness</a>
+                        <a class="nav-link" href="/covid">Covid-19</a>
                     </li>
                     <% if (user.role === 'admin') { %>
                         <li class="nav-item">
@@ -74,6 +79,10 @@
         <h1>Admin: <%= user.username %></h1>
         <p>Role: <%= user.role %></p>
     </div>
+
+    <footer>
+        <p>Created by Toretay Abdymazhit, Group IT-2202</p>
+    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
